@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MockMarkets — Prediction Markets for Everyone</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ─── Login Overlay ──────────────────────────────────────────────────── -->
+<div id="loginOverlay" class="overlay">
+  <div class="login-box">
+    <div class="login-logo">MockMarkets</div>
+    <div class="login-sub">prediction markets for joke questions</div>
+    <input id="usernameInput" type="text" placeholder="enter a username" maxlength="20" autocomplete="off" />
+    <button id="joinBtn">Enter the market →</button>
+  </div>
+</div>
+
+<!-- ─── Main App ───────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <span class="logo">MockMarkets</span>
+      <span class="tagline">live prediction markets</span>
+    </div>
+    <div class="header-right">
+      <span class="user-label">playing as</span>
+      <span id="displayUsername" class="username-badge"></span>
+      <span class="balance-label">balance</span>
+      <span id="displayBalance" class="balance-badge">$1000</span>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="layout">
+
+    <!-- Left: Market List -->
+    <section class="panel markets-panel">
+      <div class="panel-header">
+        <h2>Markets <span id="marketCount" class="count-badge">0</span></h2>
+        <button id="openCreateModal" class="btn-create">+ New</button>
+      </div>
+      <div id="marketList" class="market-list">
+        <div class="empty-state">No markets yet. Create one!</div>
+      </div>
+    </section>
+
+    <!-- Center: Active Market Detail -->
+    <section class="panel detail-panel">
+      <div id="noMarketSelected" class="empty-state center-empty">
+        <div class="empty-icon">📊</div>
+        <div>Select a market to trade</div>
+      </div>
+      <div id="marketDetail" class="hidden">
+        <div class="detail-header">
+          <div id="detailQuestion" class="detail-question"></div>
+          <div class="detail-meta">
+            <span id="detailCreator" class="meta-chip"></span>
+            <span id="detailVolume" class="meta-chip"></span>
+            <span id="detailResolved" class="meta-chip hidden resolved-chip">RESOLVED</span>
+          </div>
+        </div>
+
+        <!-- Price display -->
+        <div class="price-row">
+          <div class="price-card yes-card">
+            <div class="price-label">YES</div>
+            <div id="yesPrice" class="price-value">50¢</div>
+            <div id="yesShares" class="price-sub">0 shares</div>
+          </div>
+          <div class="price-divider">vs</div>
+          <div class="price-card no-card">
+            <div class="price-label">NO</div>
+            <div id="noPrice" class="price-value">50¢</div>
+            <div id="noShares" class="price-sub">0 shares</div>
+          </div>
+        </div>
+
+        <!-- Probability bar -->
+        <div class="prob-bar-wrap">
+          <div id="probBar" class="prob-bar">
+            <div id="probBarYes" class="prob-yes" style="width:50%"></div>
+          </div>
+          <div class="prob-labels">
+            <span>NO</span><span>YES</span>
+          </div>
+        </div>
+
+        <!-- Trade buttons -->
+        <div id="tradeActions" class="trade-actions">
+          <button id="buyYesBtn" class="trade-btn yes-btn">Buy YES — 10¢</button>
+          <button id="buyNoBtn" class="trade-btn no-btn">Buy NO — 10¢</button>
+        </div>
+
+        <!-- Resolve (creator only) -->
+        <div id="resolveSection" class="resolve-section hidden">
+          <div class="resolve-label">You created this market — resolve it:</div>
+          <div class="resolve-btns">
+            <button id="resolveYesBtn" class="resolve-btn resolve-yes">Resolve YES ✓</button>
+            <button id="resolveNoBtn" class="resolve-btn resolve-no">Resolve NO ✗</button>
+          </div>
+        </div>
+
+        <!-- Recent trades -->
+        <div class="trades-section">
+          <div class="trades-label">Recent Trades</div>
+          <div id="tradesList" class="trades-list">
+            <div class="empty-state">No trades yet</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Sidebar (leaderboard + chat + activity) -->
+    <section class="panel sidebar-panel">
+
+      <!-- Leaderboard -->
+      <div class="sidebar-block">
+        <div class="sidebar-title">🏆 Leaderboard</div>
+        <div id="leaderboard" class="leaderboard-list"></div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="sidebar-block feed-block">
+        <div class="sidebar-title">⚡ Activity</div>
+        <div id="activityFeed" class="activity-feed"></div>
+      </div>
+
+      <!-- Chat -->
+      <div class="sidebar-block chat-block">
+        <div class="sidebar-title">💬 Chat</div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input-row">
+          <input id="chatInput" type="text" placeholder="say something..." maxlength="300" />
+          <button id="chatSendBtn">→</button>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ─── Create Market Modal ────────────────────────────────────────────── -->
+<div id="createModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">Create a Market</div>
+    <textarea id="marketQuestion" placeholder="Will [something] happen by [date]?" maxlength="200" rows="3"></textarea>
+    <div class="modal-actions">
+      <button id="cancelCreate" class="btn-cancel">Cancel</button>
+      <button id="submitCreate" class="btn-submit">Create Market</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast ──────────────────────────────────────────────────────────── -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
