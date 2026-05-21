@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MockMarkets Multiplayer</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    MockMarkets Multiplayer
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="controls">
+
+    <input
+      type="text"
+      id="marketInput"
+      placeholder="Create market..."
+    >
+
+    <button
+      class="create-btn"
+      id="createBtn"
+    >
+      Create Market
+    </button>
+
+  </div>
+
+  <div
+    class="market-grid"
+    id="marketGrid"
+  ></div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
